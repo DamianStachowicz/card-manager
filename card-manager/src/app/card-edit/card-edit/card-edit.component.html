@@ -1,0 +1,19 @@
+<div class="container" [formGroup]="form">
+  <mat-form-field appearance="fill">
+    <mat-label>Treść</mat-label>
+    <textarea matInput formControlName="text"></textarea>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Rodzaj</mat-label>
+    <mat-select formControlName="type">
+      <mat-option value="answer">Odpowiedź</mat-option>
+      <mat-option value="question">Pytanie</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="buttons">
+    <button mat-raised-button [disabled]="form.invalid" (click)="send()">Zatwierdź</button>
+    <button mat-raised-button color="warn" routerLink="/list">Anuluj</button>
+  </div>
+</div>
+  
