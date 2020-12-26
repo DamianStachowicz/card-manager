@@ -6,8 +6,15 @@
 }
 
 .header {
+  display: flex;
+  flex-direction: row;
   min-height: 64px;
   padding: 8px 24px 0;
+}
+
+.add-btn {
+  height: 3em;
+  margin-left: 1em;
 }
 
 .mat-form-field {

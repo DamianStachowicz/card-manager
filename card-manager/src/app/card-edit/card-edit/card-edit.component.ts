@@ -25,7 +25,7 @@ export class CardEditComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.id = +params['cardId'];
 
-      if (this.id != null) {
+      if (!Number.isNaN(this.id)) {
         this.getCard(this.id);
       }
     });
@@ -54,8 +54,9 @@ export class CardEditComponent implements OnInit {
   }
 
   send() {
-    if (this.id !== null) {
+    if (!Number.isNaN(this.id)) {
       this.cardManagerService.editCard(this.card.id, { ...this.card, ...this.form.getRawValue() })
     }
+    this.cardManagerService.addCard({ id: null, ...this.form.getRawValue() });
   }
 }

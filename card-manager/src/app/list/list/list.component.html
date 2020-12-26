@@ -3,6 +3,7 @@
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target)" placeholder="Filter">
     </mat-form-field>
+    <button mat-raised-button class="add-btn" routerLink="/edit">Dodaj</button>
   </div>
 
   <mat-table #table [dataSource]="dataSource">
