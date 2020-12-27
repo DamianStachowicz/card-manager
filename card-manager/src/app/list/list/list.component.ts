@@ -1,6 +1,7 @@
 import { Card, CardManagerService } from 'src/app/card-manager-service/card-manager.service';
 import { Component, OnInit } from '@angular/core';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
+import { ErrorDialogComponent } from 'src/app/error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { take } from 'rxjs/operators';
@@ -21,7 +22,7 @@ export class ListComponent implements OnInit {
 
   constructor(
     private cardManagerService: CardManagerService,
-    public deleteDialog: MatDialog
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -34,7 +35,9 @@ export class ListComponent implements OnInit {
         this.cards = cards;
         this.dataSource = new MatTableDataSource(this.cards);
       },
-      error => console.log(error)
+      error => this.dialog.open(ErrorDialogComponent, {
+        data: { message: '' }
+      })
     );
   }
 
@@ -50,7 +53,7 @@ export class ListComponent implements OnInit {
   openDeleteDialog(card: Card) {
     const color = card.type === 'answer' ? 'white' : 'black';
 
-    const dialogRef = this.deleteDialog.open(DeleteDialogComponent, {
+    const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
         cardId: card.id,
         cardColor: color
@@ -61,7 +64,10 @@ export class ListComponent implements OnInit {
       result => {
         if ( result === 'yes' ) {
           this.cardManagerService.removeCard(card.id, color).pipe(take(1)).subscribe(
-            () => this.updateList()
+            () => this.updateList(),
+            error => this.dialog.open(ErrorDialogComponent, {
+              data: { message: '' }
+            })
           );
         }
       }
