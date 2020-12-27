@@ -6,8 +6,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Rodzaj</mat-label>
     <mat-select formControlName="type">
-      <mat-option value="answer">Odpowiedź</mat-option>
-      <mat-option value="question">Pytanie</mat-option>
+      <mat-option *ngFor="let type of cardTypes" [value]="type">{{ cardTypeDict[type] }}</mat-option>
     </mat-select>
   </mat-form-field>
 

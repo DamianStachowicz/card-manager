@@ -1,7 +1,8 @@
+import { ActivatedRoute, Router } from '@angular/router';
+import { Card, CardManagerService, CardType, CardTypeDict } from 'src/app/card-manager-service/card-manager.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Card, CardManagerService } from 'src/app/card-manager-service/card-manager.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-card-edit',
@@ -12,6 +13,8 @@ export class CardEditComponent implements OnInit {
   form!: FormGroup;
   id: number | null = null;
   card!: Card;
+  cardTypes = Object.keys(CardTypeDict);
+  cardTypeDict = CardTypeDict as { [type: string]: string };
 
   constructor(
     private cardManagerService: CardManagerService,
@@ -61,7 +64,7 @@ export class CardEditComponent implements OnInit {
         this.card.id,
         { ...this.card, ...this.form.getRawValue() },
         this.form.get('type')?.value === 'answer' ? 'white' : 'black'
-       ).subscribe(
+       ).pipe(take(1)).subscribe(
          () => this.router.navigate(['/list']),
          error => console.error(error)
        );
@@ -69,7 +72,7 @@ export class CardEditComponent implements OnInit {
       this.cardManagerService.addCard(
         { id: null, ...this.form.getRawValue() },
         this.form.get('type')?.value === 'answer' ? 'white' : 'black'
-      ).subscribe(
+      ).pipe(take(1)).subscribe(
         () => this.router.navigate(['/list']),
         error => console.error(error)
       );
