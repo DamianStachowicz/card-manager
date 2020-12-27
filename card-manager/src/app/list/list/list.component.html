@@ -25,7 +25,11 @@
     <ng-container matColumnDef="buttons">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <button mat-raised-button routerLink="/edit" [queryParams]="{ cardId: element.id }">Edytuj</button>
+        <button mat-raised-button routerLink="/edit" [queryParams]="{
+          cardId: element.id,
+          color: element.type === 'answer' ? 'white' : 'black' }">
+          Edytuj
+        </button>
         <button mat-raised-button color="warn">Usuń</button>
       </mat-cell>
     </ng-container>
