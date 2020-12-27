@@ -29,7 +29,6 @@ export class ListComponent implements OnInit {
   }
 
   private updateList() {
-    console.log('updateList');
     this.cardManagerService.getCards().pipe(take(1)).subscribe(
       cards => {
         this.cards = cards;
