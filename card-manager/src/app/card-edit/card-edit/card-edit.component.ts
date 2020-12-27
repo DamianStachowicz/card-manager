@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Card, CardManagerService } from 'src/app/card-manager-service/card-manager.service';
 
 @Component({
@@ -16,7 +16,8 @@ export class CardEditComponent implements OnInit {
   constructor(
     private cardManagerService: CardManagerService,
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     this.createForm();
   }
@@ -24,15 +25,16 @@ export class CardEditComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.id = +params['cardId'];
+      const color = params['color']
 
       if (!Number.isNaN(this.id)) {
-        this.getCard(this.id);
+        this.getCard(this.id, color);
       }
     });
   }
 
-  private getCard(id: number) {
-    this.cardManagerService.getCard(id).subscribe(
+  private getCard(id: number, color: string) {
+    this.cardManagerService.getCard(id, color).subscribe(
       card => {
         this.card = card;
         this.patchForm(card);
@@ -55,8 +57,22 @@ export class CardEditComponent implements OnInit {
 
   send() {
     if (!Number.isNaN(this.id)) {
-      this.cardManagerService.editCard(this.card.id, { ...this.card, ...this.form.getRawValue() })
+      this.cardManagerService.editCard(
+        this.card.id,
+        { ...this.card, ...this.form.getRawValue() },
+        this.form.get('type')?.value === 'answer' ? 'white' : 'black'
+       ).subscribe(
+         () => this.router.navigate(['/list']),
+         error => console.error(error)
+       );
+    } else {
+      this.cardManagerService.addCard(
+        { id: null, ...this.form.getRawValue() },
+        this.form.get('type')?.value === 'answer' ? 'white' : 'black'
+      ).subscribe(
+        () => this.router.navigate(['/list']),
+        error => console.error(error)
+      );
     }
-    this.cardManagerService.addCard({ id: null, ...this.form.getRawValue() });
   }
 }

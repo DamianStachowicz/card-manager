@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Card, CardManagerService } from 'src/app/card-manager-service/card-manager.service';
 
@@ -7,7 +7,7 @@ import { Card, CardManagerService } from 'src/app/card-manager-service/card-mana
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class ListComponent {  
+export class ListComponent implements OnInit {
   public cards: Card[] = [];
   public typeLabels: { [key: string]: string } = {
     answer: 'odpowiedź',
@@ -18,7 +18,9 @@ export class ListComponent {
 
   constructor(
     private cardManagerService: CardManagerService
-  ) {
+  ) { }
+
+  ngOnInit() {
     this.cardManagerService.getCards().subscribe(cards => {
       this.cards = cards;
       this.dataSource = new MatTableDataSource(this.cards);
