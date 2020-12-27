@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Usuwanie</h1>
+<div mat-dialog-content>
+  <p>Czy jesteś pewien, że chcesz usunąć kartę?</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button [mat-dialog-close]="'no'" cdkFocusInitial>Anuluj</button>
+  <button mat-raised-button color="warn" [mat-dialog-close]="'yes'">Usuń</button>
+</div>

@@ -30,7 +30,7 @@
           color: element.type === 'answer' ? 'white' : 'black' }">
           Edytuj
         </button>
-        <button mat-raised-button color="warn">Usuń</button>
+        <button mat-raised-button color="warn" (click)="openDeleteDialog(element)">Usuń</button>
       </mat-cell>
     </ng-container>
   
