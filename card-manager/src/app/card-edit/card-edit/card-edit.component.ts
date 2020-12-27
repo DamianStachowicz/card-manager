@@ -1,7 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Card, CardManagerService, CardType, CardTypeDict } from 'src/app/card-manager-service/card-manager.service';
+import { Card, CardManagerService, CardTypeDict } from 'src/app/card-manager-service/card-manager.service';
 import { Component, OnInit } from '@angular/core';
+import { ErrorDialogComponent } from 'src/app/error-dialog/error-dialog.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -18,6 +20,7 @@ export class CardEditComponent implements OnInit {
 
   constructor(
     private cardManagerService: CardManagerService,
+    private dialog: MatDialog,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router
@@ -66,7 +69,9 @@ export class CardEditComponent implements OnInit {
         this.form.get('type')?.value === 'answer' ? 'white' : 'black'
        ).pipe(take(1)).subscribe(
          () => this.router.navigate(['/list']),
-         error => console.error(error)
+         error => this.dialog.open(ErrorDialogComponent, {
+          data: { message: '' }
+        })
        );
     } else {
       this.cardManagerService.addCard(
@@ -74,7 +79,9 @@ export class CardEditComponent implements OnInit {
         this.form.get('type')?.value === 'answer' ? 'white' : 'black'
       ).pipe(take(1)).subscribe(
         () => this.router.navigate(['/list']),
-        error => console.error(error)
+        error => this.dialog.open(ErrorDialogComponent, {
+          data: { message: '' }
+        })
       );
     }
   }
