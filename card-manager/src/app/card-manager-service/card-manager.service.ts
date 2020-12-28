@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
 import { Observable, zip } from 'rxjs';
 
 @Injectable({
@@ -11,12 +10,18 @@ export class CardManagerService {
 
   constructor(private http: HttpClient) { }
 
-  getCards(searchQuery: string = ''): Observable<Card[]> {
-    const params = new HttpParams().set('searchQuery', searchQuery);
-    return zip(
-      this.http.get<Card[]>(`${this.baseUrl}/white`, { params }),
-      this.http.get<Card[]>(`${this.baseUrl}/black`, { params })
-    ).pipe(map(([white, black]) => [...white, ...black]));
+  getCards(
+    searchQuery: string = '',
+    color: 'white' | 'black',
+    page: number = 0,
+    size: number = 10
+  ): Observable<CardsGetResponse> {
+    const params = new HttpParams()
+    .set('query', searchQuery)
+    .set('page', `${page}`)
+    .set('size', `${size}`);
+
+    return this.http.get<CardsGetResponse>(`${this.baseUrl}/${color}`, { params });
   }
 
   getCard(id: number, color: string): Observable<Card> {
@@ -55,4 +60,33 @@ export const CardTypeDict = {
   'pick_1': 'Wybierz 1',
   'pick_2': 'Wybierz 2',
   'draw_2_pick_3': 'Weź 2 wybierz 3'
+}
+
+export interface Sort {
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
+}
+
+export interface Pageable {
+  sort: Sort;
+  offset: number;
+  pageNumber: number;
+  pageSize: number;
+  paged: boolean;
+  unpaged: boolean;
+}
+
+export interface CardsGetResponse {
+  content: Card[];
+  pageable: Pageable;
+  totalElements: number;
+  last: boolean;
+  totalPages: number;
+  size: number;
+  number: number;
+  sort: Sort;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
 }

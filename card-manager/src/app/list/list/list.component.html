@@ -3,7 +3,7 @@
     <mat-form-field>
       <input matInput (keyup)="applyFilter($event.target)" placeholder="Filter">
     </mat-form-field>
-    <button mat-raised-button class="add-btn" routerLink="/edit">Dodaj</button>
+    <button mat-raised-button class="add-btn" routerLink="/edit" color="primary">Dodaj</button>
   </div>
 
   <mat-table #table [dataSource]="dataSource">
@@ -25,9 +25,7 @@
     <ng-container matColumnDef="buttons">
       <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <button mat-raised-button routerLink="/edit" [queryParams]="{
-          cardId: element.id,
-          color: element.type === 'answer' ? 'white' : 'black' }">
+        <button mat-raised-button routerLink="/edit" [queryParams]="{ cardId: element.id, color: color }">
           Edytuj
         </button>
         <button mat-raised-button color="warn" (click)="openDeleteDialog(element)">Usuń</button>
@@ -37,5 +35,14 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
   </mat-table>
+
+  <mat-paginator
+    [pageSizeOptions]="[10, 20, 50, 100]"
+    [pageIndex]="pageIndex"
+    [pageSize]="pageSize"
+    [length]="length"
+    (page)="updateList(searchQuery, color, $event.pageIndex, $event.pageSize)"
+    showFirstLastButtons>
+  </mat-paginator>
 </div>
   

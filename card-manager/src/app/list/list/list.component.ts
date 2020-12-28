@@ -1,5 +1,5 @@
-import { Card, CardManagerService } from 'src/app/card-manager-service/card-manager.service';
-import { Component, OnInit } from '@angular/core';
+import { Card, CardManagerService, CardTypeDict } from 'src/app/card-manager-service/card-manager.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component';
 import { ErrorDialogComponent } from 'src/app/error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -12,6 +12,8 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+  @Input() color: 'white' | 'black' = 'white';
+
   public cards: Card[] = [];
   public typeLabels: { [key: string]: string } = {
     answer: 'odpowiedź',
@@ -19,6 +21,11 @@ export class ListComponent implements OnInit {
   };
   public dataSource: MatTableDataSource<Card> = new MatTableDataSource();
   public displayedColumns = ['id', 'text', 'type', 'buttons'];
+  public searchQuery: string = '';
+  public pageIndex: number = 0;
+  public pageSize: number = 10;
+  public length: number = 0;
+  public cardTypeDict = CardTypeDict as { [type: string]: string };
 
   constructor(
     private cardManagerService: CardManagerService,
@@ -26,13 +33,14 @@ export class ListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.updateList();
+    this.updateList('', this.color, this.pageIndex, this.pageSize);
   }
 
-  private updateList() {
-    this.cardManagerService.getCards().pipe(take(1)).subscribe(
-      cards => {
-        this.cards = cards;
+  public updateList(query: string, color: 'white' | 'black', page: number, size: number) {
+    this.cardManagerService.getCards(query, color, page, size).pipe(take(1)).subscribe(
+      response => {
+        this.cards = response.content;
+        this.length = response.totalElements;
         this.dataSource = new MatTableDataSource(this.cards);
       },
       error => this.dialog.open(ErrorDialogComponent, {
@@ -45,26 +53,24 @@ export class ListComponent implements OnInit {
     let filterValue = (target as HTMLInputElement).value;
 
     filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
+    this.searchQuery = filterValue;
 
-    this.dataSource.filter = filterValue;
+    this.updateList(this.searchQuery, this.color, 0, this.pageSize);
   }
 
   openDeleteDialog(card: Card) {
-    const color = card.type === 'answer' ? 'white' : 'black';
-
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
         cardId: card.id,
-        cardColor: color
+        cardColor: this.color
       }
     });
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(
       result => {
         if ( result === 'yes' ) {
-          this.cardManagerService.removeCard(card.id, color).pipe(take(1)).subscribe(
-            () => this.updateList(),
+          this.cardManagerService.removeCard(card.id, this.color).pipe(take(1)).subscribe(
+            () => this.updateList('', this.color, this.pageIndex, this.pageSize),
             error => this.dialog.open(ErrorDialogComponent, {
               data: { message: '' }
             })

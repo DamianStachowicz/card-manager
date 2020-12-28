@@ -1,14 +1,13 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { AppComponent } from './app.component';
 import { CardEditComponent } from './card-edit/card-edit/card-edit.component';
-import { ListComponent } from './list/list/list.component';
+import { MainComponent } from './main/main.component';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'list', component: ListComponent },
+  { path: 'list', component: MainComponent },
   { path: 'edit', component: CardEditComponent },
   { path: '',   redirectTo: 'list', pathMatch: 'full' },
-  { path: '**', component: ListComponent }
+  { path: '**', component: MainComponent }
 ];
 
 @NgModule({
