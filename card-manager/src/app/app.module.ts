@@ -13,9 +13,11 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { NgModule } from '@angular/core';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { NgModule } from '@angular/core';
     CardEditComponent,
     ListComponent,
     DeleteDialogComponent,
-    ErrorDialogComponent
+    ErrorDialogComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +41,8 @@ import { NgModule } from '@angular/core';
     MatOptionModule,
     FormsModule,
     ReactiveFormsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

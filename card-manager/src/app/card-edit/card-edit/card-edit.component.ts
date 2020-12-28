@@ -12,11 +12,11 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./card-edit.component.scss']
 })
 export class CardEditComponent implements OnInit {
-  form!: FormGroup;
-  id: number | null = null;
-  card!: Card;
-  cardTypes = Object.keys(CardTypeDict);
-  cardTypeDict = CardTypeDict as { [type: string]: string };
+  public form!: FormGroup;
+  public id: number | null = null;
+  public card!: Card;
+  public cardTypes = Object.keys(CardTypeDict);
+  public cardTypeDict = CardTypeDict as { [type: string]: string };
 
   constructor(
     private cardManagerService: CardManagerService,
