@@ -8,16 +8,17 @@ import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ListComponent } from './list/list/list.component';
+import { MainComponent } from './main/main.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { NgModule } from '@angular/core';
-import { MainComponent } from './main/main.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { MainComponent } from './main/main.component';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

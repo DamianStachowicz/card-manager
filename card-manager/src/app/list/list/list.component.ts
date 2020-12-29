@@ -4,7 +4,7 @@ import { DeleteDialogComponent } from '../delete-dialog/delete-dialog.component'
 import { ErrorDialogComponent } from 'src/app/error-dialog/error-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { take } from 'rxjs/operators';
+import { take, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-list',
@@ -26,6 +26,7 @@ export class ListComponent implements OnInit {
   public pageSize: number = 10;
   public length: number = 0;
   public cardTypeDict = CardTypeDict as { [type: string]: string };
+  public showSpinner: boolean = true;
 
   constructor(
     private cardManagerService: CardManagerService,
@@ -37,7 +38,11 @@ export class ListComponent implements OnInit {
   }
 
   public updateList(query: string, color: 'white' | 'black', page: number, size: number) {
-    this.cardManagerService.getCards(query, color, page, size).pipe(take(1)).subscribe(
+    this.showSpinner = true;
+
+    this.cardManagerService.getCards(query, color, page, size)
+    .pipe(take(1), finalize(() => this.showSpinner = false))
+    .subscribe(
       response => {
         this.cards = response.content;
         this.length = response.totalElements;
