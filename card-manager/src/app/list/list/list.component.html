@@ -6,7 +6,9 @@
     <button mat-raised-button class="add-btn" routerLink="/edit" color="primary">Dodaj</button>
   </div>
 
-  <mat-table #table [dataSource]="dataSource">
+  <mat-spinner *ngIf="showSpinner"></mat-spinner>
+
+  <mat-table #table [dataSource]="dataSource" *ngIf="!showSpinner">
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef>id</mat-header-cell>
       <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
